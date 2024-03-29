@@ -1,0 +1,46 @@
+{
+  "name": "solid-lazy-plus",
+  "version": "0.0.1",
+  "description": "Drop-in replacement for solids lazy utility, supporting ssr of lazy loaded css.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build-index": "esbuild src/index.ts --bundle --packages=external --format=esm --outfile=index.js",
+    "build-vite": "esbuild src/vite.ts --bundle --packages=external --format=esm --outfile=vite.js",
+    "types": "tsc && mv types/* . && rmdir types",
+    "build": "pnpm types && pnpm build-index && pnpm build-vite",
+    "reformat": "prettier --write .",
+    "change": "changeset",
+    "bump": "changeset version",
+    "release": "changeset publish"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": "./index.js",
+    "./vite": "./vite.js"
+  },
+  "keywords": [],
+  "authors": [
+    "Katja Lutz <opensource@katjalutz.ch>"
+  ],
+  "license": "Unlicense",
+  "dependencies": {
+    "magic-string": "^0.30.8"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/node": "^20.11.30",
+    "esbuild": "^0.20.2",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.7"
+  },
+  "peerDependencies": {
+    "@solidjs/meta": "^0.29.3",
+    "@solidjs/router": "^0.13.1",
+    "@solidjs/start": "^0.7.7",
+    "solid-js": "1.8.15",
+    "vinxi": "^0.3.11"
+  }
+}
