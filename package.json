@@ -2,8 +2,6 @@
   "name": "solid-lazy-plus",
   "version": "0.0.3",
   "description": "Drop-in replacement for solids lazy utility, supporting ssr of lazy loaded css.",
-  "main": "index.js",
-  "types": "index.d.ts",
   "type": "module",
   "scripts": {
     "build-index": "esbuild src/index.ts --bundle --packages=external --format=esm --outfile=index.js",
@@ -17,9 +15,16 @@
   },
   "sideEffects": false,
   "exports": {
-    ".": "./index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "solid": "./index.js",
+      "import": "./index.js"
+    },
     "./vite": "./vite.js"
   },
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
   "keywords": [],
   "authors": [
     "Katja Lutz <opensource@katjalutz.ch>"
