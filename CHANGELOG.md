@@ -1,5 +1,11 @@
 # solid-lazy-plus
 
+## 0.0.5
+
+### Patch Changes
+
+- 25c1dd7: Filled the README with actual content.
+
 ## 0.0.4
 
 ### Patch Changes
