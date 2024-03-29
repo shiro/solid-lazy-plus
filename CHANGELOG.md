@@ -1,5 +1,11 @@
 # solid-lazy-plus
 
+## 0.0.4
+
+### Patch Changes
+
+- e5a6f48: Added the `exports` field to package.json.
+
 ## 0.0.3
 
 ### Patch Changes
