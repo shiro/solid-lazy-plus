@@ -1,5 +1,11 @@
 # solid-lazy-plus
 
+## 0.0.2
+
+### Patch Changes
+
+- db6aa6a: Made sure that all files are included in the npm release.
+
 ## 0.0.1
 
 ### Patch Changes

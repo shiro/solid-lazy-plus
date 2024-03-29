@@ -1,6 +1,6 @@
 {
   "name": "solid-lazy-plus",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Drop-in replacement for solids lazy utility, supporting ssr of lazy loaded css.",
   "main": "index.js",
   "types": "index.d.ts",
