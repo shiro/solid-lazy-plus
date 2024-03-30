@@ -1,5 +1,11 @@
 # solid-lazy-plus
 
+## 0.0.6
+
+### Patch Changes
+
+- 2ef64ed: Added repository url to pkg.
+
 ## 0.0.5
 
 ### Patch Changes
