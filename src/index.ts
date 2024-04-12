@@ -31,9 +31,12 @@ const collectAssets = function <
 
     const router = "client";
     const assets = getBundlerManifest(router);
+    if (!assets[id]) return mod;
+
     const css: string[] = [];
     const traverse = function (id: string) {
       const chunk = assets[id];
+      if (!chunk) return;
       for (const url of chunk.css || []) {
         css.push(url);
       }
