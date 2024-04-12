@@ -34,9 +34,6 @@
     "type": "git",
     "url": "https://codeberg.org/lufrai/solid-lazy-plus"
   },
-  "dependencies": {
-    "magic-string": "^0.30.8"
-  },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@types/node": "^20.11.30",

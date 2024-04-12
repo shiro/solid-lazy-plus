@@ -1,27 +1,18 @@
-import { relative, join } from "path";
-import MagicString from "magic-string";
+import { relative } from "path";
 import type { Plugin } from "vite";
 
 const lazyAssetsPlugin = ({ router }: { router: string }): any => {
   if (router !== "server") return;
-  const modulesAbs = join(process.cwd(), "node_modules");
+  const cwd = process.cwd();
   return {
     name: "lazy-assets",
-    transform(src, id) {
-      if (id.startsWith(modulesAbs)) return;
-      if (!id.match(/(t|j)sx$/)) return;
-
-      const localId = relative(process.cwd(), id);
-
-      const s = new MagicString(src);
-      s.append(`export const id$$ = "${localId}";\n`);
-
-      const code = s.toString();
-      const map = s.generateMap();
-
+    renderDynamicImport(opts) {
+      if (!opts.moduleId.match(/(ts|js)x$/)) return;
+      if (!opts.targetModuleId?.match(/(ts|js)x?$/)) return;
+      const moduleId = relative(cwd, opts.targetModuleId);
       return {
-        code,
-        map,
+        left: "import(",
+        right: `).then(m => ({ ...m, id$$: "${moduleId}" }))`,
       };
     },
   } satisfies Plugin;
