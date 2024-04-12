@@ -1,5 +1,17 @@
 # solid-lazy-plus
 
+## 0.1.0
+
+### Minor Changes
+
+- f6fddc2: Changed the internal way how dynamically loaded module ids are tracked.
+
+  Instead of exporting the id in all modules, it will now be appended to the actual dynamic import statements, and only in jsx/tsx modules. E.g. an import like `import("./lazyForm")` will be transformed to `import("./lazyForm").then(m => ({ ...m, id$: "[id]" }))`. This should result in a smaller build output and faster build times.
+
+### Patch Changes
+
+- 50520c5: `lazy` will now just return the original module and skip assets registration, if the module cannot be found in the prod manifest.
+
 ## 0.0.6
 
 ### Patch Changes
