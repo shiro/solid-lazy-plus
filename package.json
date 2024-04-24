@@ -4,10 +4,10 @@
   "description": "Drop-in replacement for solids lazy utility, supporting ssr of lazy loaded css.",
   "type": "module",
   "scripts": {
-    "build-index": "esbuild src/index.ts --bundle --packages=external --format=esm --outfile=index.js",
-    "build-vite": "esbuild src/vite.ts --bundle --packages=external --format=esm --outfile=vite.js",
-    "types": "tsc && mv types/* . && rmdir types",
-    "build": "pnpm types && pnpm build-index && pnpm build-vite",
+    "build-index": "esbuild src/index.ts --bundle --packages=external --format=esm --outfile=dist/index.js",
+    "build-vite": "esbuild src/vite.ts --bundle --packages=external --format=esm --outfile=dist/vite.js",
+    "types": "tsc && mv types/* dist && rmdir types",
+    "build": "mkdir -p dist && pnpm types && pnpm build-index && pnpm build-vite",
     "reformat": "prettier --write .",
     "change": "changeset",
     "bump": "changeset version",
@@ -16,15 +16,15 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "solid": "./index.js",
-      "import": "./index.js"
+      "types": "./dist/index.d.ts",
+      "solid": "./dist/index.js",
+      "import": "./dist/index.js"
     },
-    "./vite": "./vite.js"
+    "./vite": "./dist/vite.js"
   },
-  "main": "index.js",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "keywords": [],
   "authors": [
     "Katja Lutz <opensource@katjalutz.ch>"
@@ -43,7 +43,7 @@
     "vite": "^5.2.7"
   },
   "peerDependencies": {
-    "@solidjs/meta": "^0.29",
+    "@solidjs/meta": "0.29.3",
     "@solidjs/router": "^0.13",
     "@solidjs/start": "^1.0.0-rc.0",
     "solid-js": "^1.8",

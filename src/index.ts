@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, createUniqueId } from "solid-js";
 import { isServer } from "solid-js/web";
 import { useHead } from "@solidjs/meta";
 import { lazy as solidLazy } from "solid-js";
@@ -33,12 +33,17 @@ const collectAssets = function <
     const assets = getBundlerManifest(router);
     if (!assets[id]) return mod;
 
-    const css: string[] = [];
+    const preloadUrls: string[] = [];
     const traverse = function (id: string) {
       const chunk = assets[id];
       if (!chunk) return;
       for (const url of chunk.css || []) {
-        css.push(url);
+        if (preloadUrls.includes(url)) continue;
+        preloadUrls.push(url);
+      }
+      for (const url of chunk.assets || []) {
+        if (preloadUrls.includes(url)) continue;
+        preloadUrls.push(url);
       }
       for (const id of chunk.imports || []) {
         traverse(id);
@@ -50,18 +55,33 @@ const collectAssets = function <
 
     return {
       default: (...args: any[]) => {
-        for (const item of css) {
-          const href = base + "/" + item;
-          useHead({
-            // TODO: what to use as id?
-            id: "",
-            tag: "link",
-            props: {
-              rel: "stylesheet",
-              href,
-            },
-          });
+        for (const url of preloadUrls) {
+          const href = base + "/" + url;
+          const ext = href.slice(href.lastIndexOf(".") + 1);
+
+          if (ext == "css")
+            useHead({
+              id: "",
+              tag: "link",
+              props: {
+                rel: "stylesheet",
+                href,
+              },
+            });
+          if (["woff", "woff2"].some((x) => ext == x))
+            useHead({
+              id: "",
+              tag: "link",
+              props: {
+                href,
+                rel: "preload",
+                as: "font",
+                type: `font/${ext}`,
+                crossorigin: "",
+              },
+            });
         }
+
         return mod.default(args);
       },
     };
