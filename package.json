@@ -7,7 +7,7 @@
     "build-index": "esbuild src/index.ts --bundle --packages=external --format=esm --outfile=dist/index.js",
     "build-vite": "esbuild src/vite.ts --bundle --packages=external --format=esm --outfile=dist/vite.js",
     "types": "tsc && mv types/* dist && rmdir types",
-    "build": "mkdir -p dist && pnpm types && pnpm build-index && pnpm build-vite && pnpm build-babel",
+    "build": "mkdir -p dist && pnpm types && pnpm build-index && pnpm build-vite",
     "reformat": "prettier --write .",
     "change": "changeset",
     "bump": "changeset version",

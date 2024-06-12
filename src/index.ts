@@ -108,6 +108,9 @@ const collectAssets = function <
         if (visited.has(id)) return;
         visited.add(id);
 
+        for (const id of chunk.imports || []) {
+          traverse(id);
+        }
         for (const url of chunk.css || []) {
           if (preloadUrls.includes(url)) continue;
           preloadUrls.push(url);
@@ -115,9 +118,6 @@ const collectAssets = function <
         for (const url of chunk.assets || []) {
           if (preloadUrls.includes(url)) continue;
           preloadUrls.push(url);
-        }
-        for (const id of chunk.imports || []) {
-          traverse(id);
         }
       };
       traverse(id);
