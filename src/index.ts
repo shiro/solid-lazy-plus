@@ -89,7 +89,7 @@ const collectAssets = function <
             });
           }
 
-          return mod.default(args);
+          return mod.default.apply(mod, args as any);
         },
       };
     } else {
@@ -153,7 +153,7 @@ const collectAssets = function <
               });
           }
 
-          return mod.default(args);
+          return mod.default.apply(mod, args as any);
         },
       };
     }

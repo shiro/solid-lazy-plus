@@ -6,7 +6,6 @@
   "scripts": {
     "build-index": "esbuild src/index.ts --bundle --packages=external --format=esm --outfile=dist/index.js",
     "build-vite": "esbuild src/vite.ts --bundle --packages=external --format=esm --outfile=dist/vite.js",
-    "build-babel": "esbuild src/babel.ts --bundle --packages=external --format=esm --outfile=dist/babel.js",
     "types": "tsc && mv types/* dist && rmdir types",
     "build": "mkdir -p dist && pnpm types && pnpm build-index && pnpm build-vite && pnpm build-babel",
     "reformat": "prettier --write .",
@@ -37,20 +36,20 @@
     "url": "https://codeberg.org/lufrai/solid-lazy-plus"
   },
   "devDependencies": {
-    "@babel/core": "7.24.4",
-    "@changesets/cli": "^2.27.1",
+    "@babel/core": "7.24.7",
+    "@changesets/cli": "2.27.5",
     "@types/babel__core": "7.20.5",
-    "@types/node": "^20.11.30",
-    "esbuild": "^0.20.2",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.3",
-    "vite": "^5.2.7"
+    "@types/node": "20.14.2",
+    "esbuild": "0.21.5",
+    "prettier": "3.3.2",
+    "typescript": "5.4.5",
+    "vite": "5.2.13"
   },
   "peerDependencies": {
-    "@solidjs/meta": "0.29.3",
-    "@solidjs/router": "^0.13",
-    "@solidjs/start": "^1.0.0-rc.0",
-    "solid-js": "^1.8",
-    "vinxi": "^0.3"
+    "@solidjs/meta": "0.29.4",
+    "@solidjs/router": "0.13.5",
+    "@solidjs/start": "1.0.1",
+    "solid-js": "1.8",
+    "vinxi": "0.3.11"
   }
 }

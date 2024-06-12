@@ -1,14 +1,17 @@
 import type * as BabelCoreNamespace from "@babel/core";
 import { PluginObj } from "@babel/core";
 import path from "path";
+import type { AliasOptions } from "vite";
 
+export type AliasMap = Exclude<AliasOptions, { [find: string]: string }>;
 type Babel = typeof BabelCoreNamespace;
 
-// interface Options {
-//   routesFile: string;
-// }
+interface Options {
+  alias: AliasMap;
+}
 
-export default (babel: Babel): PluginObj => {
+export default (babel: Babel, options: Options): PluginObj => {
+  const { alias } = options;
   const t = babel.types;
 
   let exclude = false;
@@ -41,9 +44,15 @@ export default (babel: Babel): PluginObj => {
         )
           return;
 
-        const importFilepath =
-          path.resolve(baseDir, p.node.arguments[0]?.body.arguments[0].value) +
-          ".tsx";
+        let importFilepath = p.node.arguments[0]?.body.arguments[0].value;
+
+        // resolve all aliases
+        for (const { find, replacement } of alias) {
+          importFilepath = importFilepath.replace(find, replacement);
+        }
+
+        // to absolute filepath with extension
+        importFilepath = path.resolve(baseDir, importFilepath) + ".tsx";
 
         p.node.arguments[0].body = t.callExpression(
           t.memberExpression(p.node.arguments[0]?.body, t.identifier("then")),
