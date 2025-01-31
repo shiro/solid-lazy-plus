@@ -4,11 +4,12 @@ import { isServer } from "solid-js/web";
 import { useHead } from "@solidjs/meta";
 import { lazy as solidLazy } from "solid-js";
 import { getManifest } from "vinxi/manifest";
+import { ManifestChunk } from "vite";
 
 // TODO: implement these as public APIs in Vinxi?
 const getApp = () => (globalThis as any).app;
 const getRouter = (name: string) => getApp().getRouter(name);
-const getBundlerManifest = (name: string) =>
+const getBundlerManifest = (name: string): Record<string, ManifestChunk> =>
   getApp().config.buildManifest[name];
 const getBaseUrl = (name: string) => {
   const app = getApp();
@@ -18,7 +19,6 @@ const getBaseUrl = (name: string) => {
 
 const withoutQuery = (url: string) => url.split("?")[0];
 
-// TODO: implement this in @solidjs/start?
 const collectAssets = function <
   T extends () => Promise<{ default: Component<any> }>,
 >(fn: T): T {
@@ -94,7 +94,8 @@ const collectAssets = function <
       };
     } else {
       id = path.relative(process.cwd(), id);
-      const preloadUrls: string[] = [];
+      const preloadCSSUrls: string[] = [];
+      const preloadOtherUrls: string[] = [];
       const visited: Set<String> = new Set();
 
       const router = "client";
@@ -112,12 +113,12 @@ const collectAssets = function <
           traverse(id);
         }
         for (const url of chunk.css || []) {
-          if (preloadUrls.includes(url)) continue;
-          preloadUrls.push(url);
+          if (preloadCSSUrls.includes(url)) continue;
+          preloadCSSUrls.push(url);
         }
         for (const url of chunk.assets || []) {
-          if (preloadUrls.includes(url)) continue;
-          preloadUrls.push(url);
+          if (preloadOtherUrls.includes(url)) continue;
+          preloadOtherUrls.push(url);
         }
       };
       traverse(id);
@@ -126,7 +127,7 @@ const collectAssets = function <
 
       return {
         default: (...args: any[]) => {
-          for (const url of preloadUrls) {
+          for (const url of [...preloadCSSUrls, ...preloadOtherUrls]) {
             const href = base + "/" + url;
             const ext = href.slice(href.lastIndexOf(".") + 1);
 
@@ -139,7 +140,7 @@ const collectAssets = function <
                   href,
                 },
               });
-            if (["woff", "woff2"].some((x) => ext == x))
+            if (["woff", "woff2"].some((x) => ext == x)) {
               useHead({
                 id: "",
                 tag: "link",
@@ -151,6 +152,7 @@ const collectAssets = function <
                   crossorigin: "",
                 },
               });
+            }
           }
 
           return mod.default.apply(mod, args as any);

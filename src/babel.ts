@@ -7,7 +7,7 @@ export type AliasMap = Exclude<AliasOptions, { [find: string]: string }>;
 type Babel = typeof BabelCoreNamespace;
 
 interface Options {
-  alias: AliasMap;
+  alias?: AliasMap;
 }
 
 export default (babel: Babel, options: Options): PluginObj => {
@@ -47,7 +47,7 @@ export default (babel: Babel, options: Options): PluginObj => {
         let importFilepath = p.node.arguments[0]?.body.arguments[0].value;
 
         // resolve all aliases
-        for (const { find, replacement } of alias) {
+        for (const { find, replacement } of alias ?? []) {
           importFilepath = importFilepath.replace(find, replacement);
         }
 
