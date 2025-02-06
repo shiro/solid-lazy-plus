@@ -27,8 +27,8 @@ const collectAssets = function <
   const wrapper: any = async () => {
     const mod = await fn();
 
-    let id = (mod as any).id$$;
-    if (!id) return mod;
+    let entryId = (mod as any).id$$;
+    if (!entryId) return mod;
 
     if (import.meta.env.DEV) {
       const moduleGraph = getManifest("client").dev.server.moduleGraph;
@@ -74,7 +74,7 @@ const collectAssets = function <
             }
           };
 
-          traverse(id);
+          traverse(entryId);
 
           for (const [id, code] of inlineCSS) {
             useHead({
@@ -83,6 +83,7 @@ const collectAssets = function <
               props: {
                 type: "text/css",
                 ["data-vite-dev-id"]: id,
+                ["data-imported-from"]: entryId,
                 children: code,
               },
               setting: { close: true },
@@ -93,14 +94,14 @@ const collectAssets = function <
         },
       };
     } else {
-      id = path.relative(process.cwd(), id);
+      entryId = path.relative(process.cwd(), entryId);
       const preloadCSSUrls: string[] = [];
       const preloadOtherUrls: string[] = [];
       const visited: Set<String> = new Set();
 
       const router = "client";
       const assets = getBundlerManifest(router);
-      if (!assets[id]) return mod;
+      if (!assets[entryId]) return mod;
 
       const traverse = function (id: string) {
         const chunk = assets[id];
@@ -121,7 +122,7 @@ const collectAssets = function <
           preloadOtherUrls.push(url);
         }
       };
-      traverse(id);
+      traverse(entryId);
 
       const base = getBaseUrl(router);
 
